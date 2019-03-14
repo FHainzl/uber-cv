@@ -4,8 +4,7 @@ from math import atan2
 import numpy as np
 import rospy
 import cv2
-from std_msgs import msg
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, JointState
 from cv_bridge import CvBridge, CvBridgeError
 
 from cv_tools import contour_center, range_mask, draw_rects
@@ -24,12 +23,13 @@ class ImageConverter:
                           "edge": ImgPublisher("mask_edge")}
 
         self.pub_circles = ImgPublisher("circles_image")
-        self.pub_angle = Publisher("angle", msg.Float64)
+        self.pub_angle = Publisher("angle", JointState)
 
         # Subscriber node
         self.image_sub = rospy.Subscriber(topic, Image, self.callback)
 
     def callback(self, data):
+        header = data.header
         try:
             img_cv = self.bridge.imgmsg_to_cv2(data, encoding)
         except CvBridgeError as e:
@@ -71,7 +71,11 @@ class ImageConverter:
             a = atan2(y, x)
             # a -= 0.5 * pi  # Hanging is zero angle
             a += get_dy("angle_offset")  # Center
-            self.pub_angle.publish(a)
+
+            angle_msg = JointState()
+            angle_msg.header = header
+            angle_msg.position = [a]
+            self.pub_angle.publish(angle_msg)
         except TypeError:
             pass
 
