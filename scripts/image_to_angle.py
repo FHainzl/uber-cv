@@ -56,7 +56,7 @@ class ImageConverter:
                 center = (x + 0.5 * w, y + 0.5 * h)
                 center = np.int16(np.around(center))
             except TypeError:
-                print "No {} contour found!".format(ball)
+                rospy.loginfo("No {} contour found!".format(ball))
                 center = None
             rects[ball] = rect
             centers[ball] = center
