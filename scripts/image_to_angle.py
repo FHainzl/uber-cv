@@ -110,7 +110,7 @@ def main():
 
 
 if __name__ == '__main__':
-    rospy.set_param("node_name", "uber_cv_node")
+    rospy.set_param("node_name", "image2angle")
     rospy.set_param("server_name", "cv_dyn_rec")
 
     topic = "/camera/color/image_raw"
