@@ -1,3 +1,3 @@
 config = {
-    "publisher_q_size": 5,
+    "publisher_q_size": 1,
 }

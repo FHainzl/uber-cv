@@ -30,6 +30,10 @@ class ImageConverter:
 
     def callback(self, data):
         header = data.header
+
+        # Realsense time stamps were off
+        header.stamp = rospy.Time.now()
+
         try:
             img_cv = self.bridge.imgmsg_to_cv2(data, encoding)
         except CvBridgeError as e:
