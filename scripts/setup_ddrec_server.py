@@ -11,29 +11,29 @@ def setup_ddrec_server():
 
     # In Range for central ball
     dd.add_variable("H_Low_Core", "Lower bound hue for central ball",
-                    18, 0, 180)
+                    84, 0, 180)
     dd.add_variable("H_High_Core", "Higher bound hue for central ball",
-                    32, 0, 180)
+                    103, 0, 180)
     dd.add_variable("S_Low_Core", "Lower bound saturation for central ball",
-                    191, 0, 255)
+                    195, 0, 255)
     dd.add_variable("S_High_Core", "Higher bound saturation for central ball",
                     255, 0, 255)
     dd.add_variable("V_Low_Core", "Lower bound value for central ball",
-                    88, 0, 255)
+                    54, 0, 255)
     dd.add_variable("V_High_Core", "Higher bound value for central ball",
                     255, 0, 255)
 
     # In Range for edge ball
     dd.add_variable("H_Low_Edge", "Lower bound hue for edge ball",
-                    84, 0, 180)
+                    18, 0, 180)
     dd.add_variable("H_High_Edge", "Higher bound hue for edge ball",
-                    104, 0, 180)
+                    32, 0, 180)
     dd.add_variable("S_Low_Edge", "Lower bound saturation for edge ball",
-                    143, 0, 255)
+                    160, 0, 255)
     dd.add_variable("S_High_Edge", "Higher bound saturation for edge ball",
                     255, 0, 255)
     dd.add_variable("V_Low_Edge", "Lower bound value for edge ball",
-                    28, 0, 255)
+                    64, 0, 255)
     dd.add_variable("V_High_Edge", "Higher bound value for edge ball",
                     255, 0, 255)
 

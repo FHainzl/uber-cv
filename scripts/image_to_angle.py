@@ -13,6 +13,8 @@ from img_publisher import ImgPublisher
 from setup_ddrec_server import setup_ddrec_server
 from utils import human_time, get_dy
 
+from config import config as c
+
 
 class ImageConverter:
     def __init__(self):
@@ -40,7 +42,7 @@ class ImageConverter:
             print(e)
             return
 
-        if print_received:
+        if c["print_img_received"]:
             time = human_time(data.header.stamp)
             rospy.loginfo("Message received from {}".format(time))
 
@@ -54,7 +56,7 @@ class ImageConverter:
             mask = range_mask(img_cv, lower, higher)
 
             self.pub_masks[ball].publish(mask)
-            rect = contour_center(mask)
+            rect = contour_center(mask, c["minimal_area"])
             try:
                 x, y, w, h = rect
                 center = (x + 0.5 * w, y + 0.5 * h)
@@ -66,7 +68,7 @@ class ImageConverter:
             centers[ball] = center
 
         circle_img = draw_rects(img_cv, (rects["core"], rects["edge"]),
-                                [(0, 255, 0), (255, 0, 0)])
+                                [(255, 0, 0), (0, 255, 0)])
         self.pub_circles.publish(circle_img)
 
         try:
@@ -120,5 +122,4 @@ if __name__ == '__main__':
     topic = "/camera/color/image_raw"
     encoding = "bgr8"
 
-    print_received = False
     main()
