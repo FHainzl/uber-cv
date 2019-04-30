@@ -1,2 +1,2 @@
 # uber-cv
-Convert image fo two colored balls to angle 
+Convert image with two colored balls to angle 
