@@ -4,6 +4,7 @@ from math import atan2
 import numpy as np
 import rospy
 import cv2
+from std_msgs.msg import Float32
 from sensor_msgs.msg import Image, JointState
 from cv_bridge import CvBridge, CvBridgeError
 
@@ -23,6 +24,8 @@ class ImageConverter:
         # Publisher nodes
         self.pub_masks = {"core": ImgPublisher("mask_core"),
                           "edge": ImgPublisher("mask_edge")}
+        self.pub_areas = {"core": Publisher("area_core", Float32),
+                          "edge": Publisher("area_edge", Float32)}
 
         self.pub_circles = ImgPublisher("circles_image")
         self.pub_angle = Publisher("angle", JointState)
@@ -56,7 +59,11 @@ class ImageConverter:
             mask = range_mask(img_cv, lower, higher)
 
             self.pub_masks[ball].publish(mask)
-            rect = contour_center(mask, c["minimal_area"], c["maximal_area"])
+            min_area = c["minimal_area"]
+            max_area = c["maximal_area"]
+            rect, area = contour_center(mask, min_area, max_area)
+            if area is not None:
+                self.pub_areas[ball].publish(area)
             try:
                 x, y, w, h = rect
                 center = (x + 0.5 * w, y + 0.5 * h)

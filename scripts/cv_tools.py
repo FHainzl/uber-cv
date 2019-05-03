@@ -18,16 +18,15 @@ def contour_center(mask, min_area, max_area):
     try:
         c_i, c = max(enumerate(contours), key=lambda e: cv2.contourArea(e[1]))
     except ValueError:
-        return None
-    max_area = 1000
+        return None, None
     while cv2.contourArea(c) > max_area:
         contours.pop(c_i)
         c_i, c = max(enumerate(contours), key=lambda e: cv2.contourArea(e[1]))
-    print cv2.contourArea(c)
-    if cv2.contourArea(c) < min_area:
-        return None
+    area = cv2.contourArea(c)
+    if area < min_area:
+        return None, None
     rect = cv2.boundingRect(c)
-    return np.uint16(np.around(rect))
+    return np.uint16(np.around(rect)), area
 
 
 def draw_rects(img, rects, colors):
