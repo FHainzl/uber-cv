@@ -10,15 +10,20 @@ def range_mask(img, lower_bound, upper_bound):
     return mask
 
 
-def contour_center(mask, min_area=400):
+def contour_center(mask, min_area, max_area):
     im2, contours, hierarchy = cv2.findContours(mask,
-                                                cv2.RETR_TREE,
+                                                cv2.RETR_LIST,
                                                 cv2.CHAIN_APPROX_NONE)
 
     try:
-        c = max(contours, key=cv2.contourArea)
+        c_i, c = max(enumerate(contours), key=lambda e: cv2.contourArea(e[1]))
     except ValueError:
         return None
+    max_area = 1000
+    while cv2.contourArea(c) > max_area:
+        contours.pop(c_i)
+        c_i, c = max(enumerate(contours), key=lambda e: cv2.contourArea(e[1]))
+    print cv2.contourArea(c)
     if cv2.contourArea(c) < min_area:
         return None
     rect = cv2.boundingRect(c)

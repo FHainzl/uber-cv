@@ -56,7 +56,7 @@ class ImageConverter:
             mask = range_mask(img_cv, lower, higher)
 
             self.pub_masks[ball].publish(mask)
-            rect = contour_center(mask, c["minimal_area"])
+            rect = contour_center(mask, c["minimal_area"], c["maximal_area"])
             try:
                 x, y, w, h = rect
                 center = (x + 0.5 * w, y + 0.5 * h)
