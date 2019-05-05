@@ -1,0 +1,21 @@
+<launch>
+    <arg name="setup" default="false"/>
+    <include
+            file="$(env HOME)/catkin_ws/src/realsense/realsense2_camera/launch/rs_camera.launch">
+        <arg name="enable_fisheye" value="false"/>
+        <arg name="enable_depth" value="false"/>
+        <arg name="enable_infra1" value="false"/>
+        <arg name="enable_infra2" value="false"/>
+    </include>
+    <node pkg="uber-cv" type="image_to_angle.py" name="image2angle"
+          output="screen"/>
+
+    <param name="setup" value="true"/>
+    <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="reconfigure"/>
+    <node type="rviz" name="rviz" pkg="rviz"/>
+    <node name="angle_plot" pkg="rqt_plot" type="rqt_plot"
+          args="/angle/position[0]"/>
+    <node name="area_plot" pkg="rqt_plot" type="rqt_plot"
+          args="/area_core /area_edge"/>
+
+</launch>
