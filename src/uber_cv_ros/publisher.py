@@ -1,5 +1,5 @@
 import rospy
-from config import config as c
+from uber_cv.config import config as c
 
 
 class Publisher(object):

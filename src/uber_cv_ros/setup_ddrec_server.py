@@ -1,46 +1,41 @@
-import json
-from math import pi
-
 import rospy
+import json
 from ddynamic_reconfigure_python.ddynamic_reconfigure import DDynamicReconfigure
-
-from utils import get_dy
+from cv_ros_tools import get_dy
 
 
 def setup_ddrec_server():
-    params_file = "/home/fab/catkin_ws/src/uber-cv/scripts/params.json"
+    params_file = "/home/fab/catkin_ws/src/uber-cv/src/uber_cv_ros/params.json"
 
     def dyn_rec_callback(config, level):
-        if rospy.get_param("/setup"):
+        param_names = [
+            # Core Ball
+            "H_Low_Core",
+            "H_High_Core",
+            "S_Low_Core",
+            "S_High_Core",
+            "V_Low_Core",
+            "V_High_Core",
+            "H_Low_Core",
+            # Edge Ball
+            "H_Low_Edge",
+            "H_High_Edge",
+            "S_Low_Edge",
+            "S_High_Edge",
+            "V_Low_Edge",
+            "V_High_Edge",
+            # Angle
+            "angle_offset"
+        ]
 
-            param_names = [
-                # Core Ball
-                "H_Low_Core",
-                "H_High_Core",
-                "S_Low_Core",
-                "S_High_Core",
-                "V_Low_Core",
-                "V_High_Core",
-                "H_Low_Core",
-                # Edge Ball
-                "H_Low_Edge",
-                "H_High_Edge",
-                "S_Low_Edge",
-                "S_High_Edge",
-                "V_Low_Edge",
-                "V_High_Edge",
-                # Angle
-                "angle_offset"
-            ]
-
-            try:
-                if get_dy("SaveToJson"):
-                    new_params = {param: get_dy(param) for param in param_names}
-                    with open(params_file, 'w') as f:
-                        json.dump(new_params, f)
-                    rospy.loginfo("Parameters saved to json")
-            except KeyError:
-                rospy.loginfo("Param not found, is parameter server running?")
+        try:
+            if get_dy("SaveToJson") == 1:
+                new_params = {param: get_dy(param) for param in param_names}
+                with open(params_file, 'w') as f:
+                    json.dump(new_params, f)
+                rospy.loginfo("Parameters saved to json")
+        except KeyError:
+            rospy.loginfo("Param not found, is parameter server running?")
 
         return config
 
