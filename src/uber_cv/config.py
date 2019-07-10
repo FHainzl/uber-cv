@@ -3,11 +3,13 @@ from os import path
 config = {
     "publisher_q_size": 1,
 
+    "publish_velocity": True,
+
     # Largest contour within area range below will be considered the ball
     "min_area": 600,
     "max_area": 1800,
 
-    "print_img_received": False,
+    "print_img_received": True,
 
     # Paths inside ros node are relative to ROS_HOME (~/.ros by default)
     # Use absolute path instead

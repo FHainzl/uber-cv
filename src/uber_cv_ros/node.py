@@ -18,6 +18,10 @@ class Node:
 
         self.bridge = CvBridge()
 
+        # Last angle and time stamp to calculate angular acceleration
+        self.last_angle = None
+        self.last_stamp = None
+
         # Publisher nodes
         self.pub_masks = {"core": ImgPublisher("mask_core"),
                           "edge": ImgPublisher("mask_edge")}
@@ -67,4 +71,23 @@ class Node:
         angle_msg = JointState()
         angle_msg.header = header
         angle_msg.position = [angle]
-        self.pub_angle.publish(angle_msg)
+        if not c["publish_velocity"]:
+            self.pub_angle.publish(angle_msg)
+            
+        else:
+            stamp = header.stamp.to_sec()
+            angular_velocity = self.angular_velocity(angle, stamp)
+            if angular_velocity is not None:
+                angle_msg.velocity = [angular_velocity]
+                self.pub_angle.publish(angle_msg)
+
+            self.last_angle = angle
+            self.last_stamp = stamp
+
+    def angular_velocity(self, angle, stamp):
+        if self.last_angle is None:
+            return None
+        dt = stamp - self.last_stamp
+        if dt > 0.1:
+            return None
+        return (angle - self.last_angle) / dt
