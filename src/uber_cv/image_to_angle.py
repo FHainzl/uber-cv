@@ -9,7 +9,7 @@ from std_msgs.msg import Float32
 from sensor_msgs.msg import Image, JointState
 from cv_bridge import CvBridge, CvBridgeError
 
-from cv_tools import get_contour_center, extract_contours, draw_rects
+from cv_tools import contour_center, contours_in_range, draw_rects
 from config import config as c
 
 
@@ -41,11 +41,11 @@ class ImageToAngle:
 
         for ball in ("core", "edge"):
             lower, higher = bounds[ball]
-            mask = extract_contours(img_cv, lower, higher)
+            mask = contours_in_range(img_cv, lower, higher)
 
             results["mask"][ball] = mask
 
-            rect, area = get_contour_center(mask, self.min_area, self.max_area)
+            rect, area = contour_center(mask, self.min_area, self.max_area)
             if area is not None:
                 results["area"][ball] = area
             try:
