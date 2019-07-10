@@ -3,7 +3,7 @@
 import rospy
 import cv2
 
-from uber_cv_ros.pubsub import PubSub
+from uber_cv_ros.node import Node
 from uber_cv_ros.setup_ddrec_server import setup_ddrec_server
 
 
@@ -18,7 +18,7 @@ def main():
     encoding = "bgr8"
 
     dd_server = setup_ddrec_server()
-    pubsub = PubSub(topic, encoding)
+    pubsub = Node(topic, encoding)
 
     try:
         rospy.spin()

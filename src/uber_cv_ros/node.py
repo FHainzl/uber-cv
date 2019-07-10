@@ -7,12 +7,12 @@ from cv_bridge import CvBridge, CvBridgeError
 from publisher import Publisher
 from img_publisher import ImgPublisher
 
-from cv_ros_tools import get_dy, bounds_core_ball, bounds_edge_ball, human_time
+from ros_tools import get_dy, bounds, human_time
 from uber_cv.cv_tools import image_to_angle
 from uber_cv.config import config as c
 
 
-class PubSub:
+class Node:
     def __init__(self, topic, encoding):
         self.encoding = encoding
 
@@ -46,7 +46,7 @@ class PubSub:
             time = human_time(data.header.stamp)
             rospy.loginfo("Message received from {}".format(time))
 
-        results = image_to_angle(img_cv, bounds_core_ball(), bounds_edge_ball())
+        results = image_to_angle(img_cv, bounds("core"), bounds("edge"))
 
         # Check if both balls were found
         for ball in ["core", "edge"]:

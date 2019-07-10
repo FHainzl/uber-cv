@@ -1,11 +1,12 @@
 import rospy
 import json
 from ddynamic_reconfigure_python.ddynamic_reconfigure import DDynamicReconfigure
-from cv_ros_tools import get_dy
+from ros_tools import get_dy
+from uber_cv.config import config as c
 
 
 def setup_ddrec_server():
-    params_file = "/home/fab/catkin_ws/src/uber-cv/src/uber_cv_ros/params.json"
+    params_file = c["param_path"]
 
     def dyn_rec_callback(config, level):
         param_names = [

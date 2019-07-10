@@ -8,16 +8,18 @@ from config import config as c
 
 def image_to_angle(img_cv, bounds_core, bounds_edge):
     """
-    Detect two colored balls in BGR image and return angle to vertical
+    Detect two colored balls in BGR image
+
+    Return angle between balls and vertical, as well as processing steps
     """
 
     results = {
-        "angle": None,
-        "mask": {},
-        "area": {},
-        "rect": {},
-        "center": {},
-        "rect_img": None
+        "angle": None,  # float with angle
+        "mask": {},  # bitmaps with contours in HSV range
+        "area": {},  # floats with areas of selected contour
+        "rect": {},  # (x,y,w,h) of rects
+        "center": {},  # Tuples with x,y of center of balls
+        "rect_img": None  # Image with bounding rectangles around selected areas
     }
 
     bounds = {"core": bounds_core,
