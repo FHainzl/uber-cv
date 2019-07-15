@@ -1,7 +1,7 @@
 import cv_bridge
 from sensor_msgs.msg import Image
 
-from uber_cv_ros.publisher import Publisher
+from uber_cv_ros.publishers.publisher import Publisher
 
 
 class ImgPublisher(Publisher):

@@ -1,4 +1,6 @@
 <launch>
+    <arg name="angular_vel" default="true"/>
+    <param name="angular_vel" value="$(arg angular_vel)"/>
     <include
             file="$(env HOME)/catkin_ws/src/realsense/realsense2_camera/launch/rs_camera.launch">
         <arg name="enable_fisheye" value="false"/>
@@ -10,8 +12,16 @@
           output="screen"/>
     <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="reconfigure"/>
     <node type="rviz" name="rviz" pkg="rviz"/>
-    <node name="angle_plot" pkg="rqt_plot" type="rqt_plot"
-          args="/angle/position[0] /angle/velocity[0]"/>
-    <node name="area_plot" pkg="rqt_plot" type="rqt_plot"
+     <node name="area_plot" pkg="rqt_plot" type="rqt_plot"
           args="/area_core /area_edge"/>
+    <group if="$(arg angular_vel)">
+        <node name="angle_plot" pkg="rqt_plot" type="rqt_plot"
+          args="/angle/position[0] /angle/velocity[0]"/>
+    </group>
+      <group unless="$(arg angular_vel)">
+        <node name="angle_plot" pkg="rqt_plot" type="rqt_plot"
+          args="/angle/position[0]"/>
+    </group>
+
+
 </launch>

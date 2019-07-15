@@ -4,8 +4,8 @@ import rospy
 from std_msgs.msg import Float32
 from sensor_msgs.msg import Image, JointState
 from cv_bridge import CvBridge, CvBridgeError
-from publisher import Publisher
-from img_publisher import ImgPublisher
+from uber_cv_ros.publishers.publisher import Publisher
+from uber_cv_ros.publishers.img_publisher import ImgPublisher
 
 from ros_tools import get_dy, bounds, human_time
 from uber_cv.cv_tools import image_to_angle
@@ -17,7 +17,7 @@ class Node:
         self.encoding = encoding
 
         self.bridge = CvBridge()
-
+        self.publish_angular_vel = rospy.get_param("angular_vel")
         # Last angle and time stamp to calculate angular acceleration
         self.last_angle = None
         self.last_stamp = None
@@ -32,9 +32,9 @@ class Node:
         self.pub_angle = Publisher("angle", JointState)
 
         # Subscriber node
-        self.image_sub = rospy.Subscriber(topic, Image, self.callback)
+        self.image_sub = rospy.Subscriber(topic, Image, self.process_image)
 
-    def callback(self, data):
+    def process_image(self, data):
         header = data.header
 
         # Replace RealSense time stamps with current time, because they were off
@@ -71,7 +71,7 @@ class Node:
         angle_msg = JointState()
         angle_msg.header = header
         angle_msg.position = [angle]
-        if not c["publish_velocity"]:
+        if not self.publish_angular_vel:
             self.pub_angle.publish(angle_msg)
             
         else:
